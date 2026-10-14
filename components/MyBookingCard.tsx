@@ -1,0 +1,3 @@
+import Link from "next/link";
+import type { Booking } from "@/lib/bookings";
+export default function MyBookingCard({ booking }: { booking: Booking }) { const date = new Date(`${booking.date}T12:00:00`); return <article className="booking-row"><div className="booking-date"><strong>{date.toLocaleDateString("en-US",{day:"2-digit"})}</strong><span>{date.toLocaleDateString("en-US",{month:"short"}).toUpperCase()}</span></div><div className="booking-info"><h3>{booking.event}</h3><p>{booking.tickets} {booking.tickets===1?"ticket":"tickets"} · Booked for {booking.name}</p></div><Link className="text-link" href={`/confirmation?id=${booking.id}`}>View ticket →</Link></article> }
