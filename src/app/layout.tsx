@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "../context/AuthContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -14,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VYBE | Discover Events",
-  description: "Discover events. Create better stories with VYBE.",
+  title: "VYBE",
+  description: "Discover, book, and experience events.",
 };
 
 export default function RootLayout({
@@ -28,7 +29,7 @@ export default function RootLayout({
       <body
         className={`${poppins.className} ${geistMono.variable} min-h-full flex flex-col antialiased`}
       >
-        {children}
+        <AuthProvider> {children}</AuthProvider>
       </body>
     </html>
   );
