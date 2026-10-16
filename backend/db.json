@@ -1,4 +1,20 @@
 {
   "events": [],
-  "users": []
+  "users": [
+    {
+      "name": "Simran Bist",
+      "email": "simran@gmail.com",
+      "password": "simran123",
+      "confirmPassword": "simran123",
+      "id": "XvzUXJlDPSs"
+    },
+    {
+      "name": "Alex",
+      "email": "alex@gmail.com",
+      "password": "alex1234",
+      "confirmPassword": "alex1234",
+      "id": "S6PpVriIzL8"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

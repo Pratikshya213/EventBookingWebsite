@@ -1,36 +1,36 @@
 import api from "./axios";
 
-//Register
+// Register
 export async function registerUser(
   name: string,
   email: string,
   password: string,
-  confirmpassword: string,
+  confirmPassword: string,
 ) {
   try {
-    //check whether the email already exists or not
     const existingUsers = await api.get(
-      `/users?email=${encodeURIComponent(email)}`,
+      `/users?email=${encodeURIComponent(email.trim())}`,
     );
 
     if (existingUsers.data.length > 0) {
       throw new Error("User already exists.");
     }
-    //save the new user
+
     const response = await api.post("/users", {
-      name,
-      email,
+      name: name.trim(),
+      email: email.trim(),
       password,
-      confirmpassword,
+      confirmPassword,
     });
+
     return response.data;
   } catch (error) {
-    console.error("Registration Failed!");
+    console.error("Registration failed:", error);
     throw error;
   }
 }
 
-//Login
+// Login
 export async function loginUser(email: string, password: string) {
   try {
     const response = await api.get(
@@ -39,15 +39,14 @@ export async function loginUser(email: string, password: string) {
 
     const user = response.data.find(
       (user: { email: string; password: string }) =>
-        user.email.toLowerCase() == email.trim().toLowerCase() &&
-        user.password == password,
+        user.email.toLowerCase() === email.trim().toLowerCase() &&
+        user.password === password,
     );
 
     if (!user) {
       throw new Error("Invalid email or password.");
     }
 
-    //exclude password fields from the rest of the returned user object
     const {
       password: _password,
       confirmPassword: _confirmPassword,
@@ -56,7 +55,7 @@ export async function loginUser(email: string, password: string) {
 
     return userInfo;
   } catch (error) {
-    console.error("Login Failed!");
+    console.error("Login failed:", error);
     throw error;
   }
 }
