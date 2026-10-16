@@ -29,7 +29,7 @@ export default function RootLayout({
       <body
         className={`${poppins.className} ${geistMono.variable} min-h-full flex flex-col antialiased`}
       >
-        <AuthProvider> {children}</AuthProvider>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

@@ -42,7 +42,7 @@ export default function LoginForm() {
         email: user.email,
       });
 
-      router.push("/");
+      router.push("/events");
     } catch (error) {
       setError(
         error instanceof Error
