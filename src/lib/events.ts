@@ -24,8 +24,10 @@ export const events: EventItem[] = [
     venue: "Bhrikutimandap",
     city: "Kathmandu",
     price: 1500,
-    image: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1200&q=80",
-    description: "Enjoy an evening of live music, local artists, and unforgettable performances.",
+    image:
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1200&q=80",
+    description:
+      "Enjoy an evening of live music, local artists, and unforgettable performances.",
     availableTickets: 120,
   },
   {
@@ -38,8 +40,10 @@ export const events: EventItem[] = [
     venue: "Nepal Art Council",
     city: "Kathmandu",
     price: 500,
-    image: "https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=1200&q=80",
-    description: "Discover contemporary art, installations, and work by emerging creatives.",
+    image:
+      "https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=1200&q=80",
+    description:
+      "Discover contemporary art, installations, and work by emerging creatives.",
     availableTickets: 60,
   },
   {
@@ -52,8 +56,10 @@ export const events: EventItem[] = [
     venue: "The Plaza",
     city: "Lalitpur",
     price: 1000,
-    image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80",
-    description: "Meet founders, exchange ideas, and build connections with Nepal's startup community.",
+    image:
+      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80",
+    description:
+      "Meet founders, exchange ideas, and build connections with Nepal's startup community.",
     availableTickets: 0,
   },
   {
@@ -66,8 +72,10 @@ export const events: EventItem[] = [
     venue: "Jawalakhel Ground",
     city: "Lalitpur",
     price: 300,
-    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1200&q=80",
-    description: "Try new flavours, discover local food stalls, and spend a delicious day out.",
+    image:
+      "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1200&q=80",
+    description:
+      "Try new flavours, discover local food stalls, and spend a delicious day out.",
     availableTickets: 200,
   },
 ];

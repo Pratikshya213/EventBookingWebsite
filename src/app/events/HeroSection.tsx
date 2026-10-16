@@ -1,6 +1,6 @@
 export default function HeroSection() {
   return (
-    <section className="bg-[#fff8eb] px-6 py-12 sm:px-8 sm:py-16 lg:px-12 lg:py-18">
+    <section className="bg-[#fff8eb] px-6 py-12">
       <div className="text-[#805c58]">
         <h3 className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] ">
           Find your next plan

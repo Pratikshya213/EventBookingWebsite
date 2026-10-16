@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
+import { useFavorites } from "@/context/FavoritesContext";
 
 type Event = {
   id: string | number;
@@ -21,7 +22,22 @@ type EventCardProps = {
 };
 
 export default function EventCard({ event }: EventCardProps) {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const favorite = isFavorite(event.id);
+
+  const [message, setMessage] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
+
+  const handleFavorite = () => {
+    toggleFavorite(event);
+
+    setMessage(favorite ? "Removed from favorites" : "Saved for later!");
+    setShowMessage(true);
+
+    window.setTimeout(() => {
+      setShowMessage(false);
+    }, 2000);
+  };
 
   return (
     <motion.article
@@ -34,19 +50,25 @@ export default function EventCard({ event }: EventCardProps) {
     >
       {/* Event Image */}
       <div className="relative h-[190px] sm:h-[220px]">
-        <motion.div
+        <Link
+          href={`/events/${event.id}`}
+          aria-label={`View details for ${event.title}`}
           className="absolute inset-0"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.5 }}
         >
-          <Image
-            src={event.image}
-            alt={event.title}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-            className="object-cover"
-          />
-        </motion.div>
+          <motion.div
+            className="absolute inset-0"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Image
+              src={event.image}
+              alt={event.title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+              className="object-cover"
+            />
+          </motion.div>
+        </Link>
 
         {/* Category */}
         <span className="absolute left-4 top-4 rounded-full bg-white/95 px-4 py-2 text-sm font-semibold text-[#452b2e]">
@@ -57,16 +79,16 @@ export default function EventCard({ event }: EventCardProps) {
         <motion.button
           type="button"
           aria-label={
-            isFavorite
+            favorite
               ? `Remove ${event.title} from favorites`
               : `Add ${event.title} to favorites`
           }
-          aria-pressed={isFavorite}
-          onClick={() => setIsFavorite((prev) => !prev)}
+          aria-pressed={favorite}
+          onClick={handleFavorite}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           className={`absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-xl border border-[#e5dedc] bg-white/95 transition-colors duration-300 ${
-            isFavorite ? "text-red-500" : "text-[#452b2e] hover:text-red-500"
+            favorite ? "text-red-500" : "text-red-500 hover:text-red-600"
           }`}
         >
           <motion.svg
@@ -74,19 +96,36 @@ export default function EventCard({ event }: EventCardProps) {
             width="21"
             height="21"
             viewBox="0 0 24 24"
-            fill={isFavorite ? "currentColor" : "none"}
+            fill={favorite ? "currentColor" : "none"}
             stroke="currentColor"
             strokeWidth="1.8"
             strokeLinecap="round"
             strokeLinejoin="round"
             animate={{
-              scale: isFavorite ? [1, 1.25, 1] : 1,
+              scale: favorite ? [1, 1.25, 1] : 1,
             }}
             transition={{ duration: 0.25 }}
           >
             <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z" />
           </motion.svg>
         </motion.button>
+
+        {/* Popup Message */}
+        <AnimatePresence>
+          {showMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              role="status"
+              className="absolute right-3 top-16 z-10 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#452b2e] shadow-lg"
+            >
+              <span className="mr-2 text-red-500">♥</span>
+              {message}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Event Details */}
@@ -96,6 +135,7 @@ export default function EventCard({ event }: EventCardProps) {
           <p className="text-sm font-semibold uppercase tracking-wide text-[#e76f61]">
             {event.date}
           </p>
+
           <p className="text-3xl font-bold tracking-tight text-[#452b2e]">
             {event.day}
           </p>
@@ -123,6 +163,7 @@ export default function EventCard({ event }: EventCardProps) {
             <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
             <circle cx="12" cy="10" r="2.5" />
           </svg>
+
           <p>{event.location}</p>
         </div>
 

@@ -3,62 +3,86 @@
     {
       "id": "1",
       "title": "Midnight Echoes",
+      "description": "Experience an unforgettable night of live music, powerful performances, and electrifying sounds with fellow music lovers.",
       "category": "Music",
       "image": "/images/05NepathyamembersperforminginBandipur-1771154691.jpg",
       "date": "Jul",
       "day": "18",
+      "time": "7:00 PM",
       "location": "The Glasshouse, Brooklyn, NY",
-      "price": 48
+      "venue": "The Glasshouse",
+      "price": 48,
+      "soldOut": false
     },
     {
       "id": "2",
       "title": "Summer Beats",
+      "description": "Enjoy a vibrant summer festival filled with energetic performances, great music, and an exciting outdoor atmosphere.",
       "category": "Festival",
       "image": "/images/austin-neill-247047-unsplash.jpg",
       "date": "Aug",
       "day": "05",
+      "time": "4:00 PM",
       "location": "Central Park, New York, NY",
-      "price": 35
+      "venue": "Central Park",
+      "price": 35,
+      "soldOut": false
     },
     {
       "id": "3",
       "title": "Neon Nights Festival",
+      "description": "Dance beneath the lights at a high-energy music festival featuring exciting performances, vibrant visuals, and unforgettable vibes.",
       "category": "Music",
       "image": "/images/hero-concert-eventuria_pura8c.webp",
       "date": "Aug",
       "day": "12",
+      "time": "6:00 PM",
       "location": "Bhrikutimandap, Kathmandu, Nepal",
-      "price": 25
+      "venue": "Bhrikutimandap",
+      "price": 25,
+      "soldOut": false
     },
     {
       "id": "4",
       "title": "Canvas & Coffee",
+      "description": "Discover local creativity through art, connect with artists, and enjoy a relaxed atmosphere with coffee and inspiring conversations.",
       "category": "Art",
       "image": "/images/images.jpg",
       "date": "Aug",
       "day": "20",
+      "time": "11:00 AM",
       "location": "Thamel, Kathmandu, Nepal",
-      "price": 15
+      "venue": "Thamel Art Space",
+      "price": 15,
+      "soldOut": false
     },
     {
       "id": "5",
       "title": "Startup Connect",
+      "description": "Meet entrepreneurs, exchange innovative ideas, build professional connections, and explore opportunities with Nepal's startup community.",
       "category": "Business",
       "image": "/images/business.jpg",
       "date": "Sep",
       "day": "05",
+      "time": "10:00 AM",
       "location": "Lalitpur, Nepal",
-      "price": 10
+      "venue": "Lalitpur Convention Center",
+      "price": 10,
+      "soldOut": false
     },
     {
       "id": "6",
       "title": "Art in Bloom Festival",
+      "description": "Celebrate art, culture, and creativity through colorful displays, artistic experiences, and the work of talented local creators.",
       "category": "Art",
       "image": "/images/art_bloom.jpg",
       "date": "Sep",
       "day": "12",
+      "time": "12:00 PM",
       "location": "Patan Durbar Square, Lalitpur, Nepal",
-      "price": 20
+      "venue": "Patan Durbar Square",
+      "price": 20,
+      "soldOut": false
     }
   ],
   "users": [

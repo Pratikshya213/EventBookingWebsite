@@ -1,6 +1,8 @@
 import Footer from "@/components/Footer";
 import HeroSection from "./HeroSection";
 import EventCard from "./EventCard";
+import SearchBar from "./SearchBar";
+import EventList from "./EventList";
 
 type Event = {
   id: string | number;
@@ -38,21 +40,7 @@ export default async function EventPage() {
     <div className="min-h-screen bg-[#fff8eb]">
       <HeroSection />
 
-      <section className="px-5 py-10 sm:px-8 lg:px-12">
-        {events.length > 0 ? (
-          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
-            {events.map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          </div>
-        ) : (
-          <p className="py-12 text-center text-[#805c58]">
-            No events found. Please check whether the server is running.
-          </p>
-        )}
-      </section>
-
-      <Footer />
+      <EventList events={events} />
     </div>
   );
 }
