@@ -1,5 +1,66 @@
 {
-  "events": [],
+  "events": [
+    {
+      "id": "1",
+      "title": "Midnight Echoes",
+      "category": "Music",
+      "image": "/images/05NepathyamembersperforminginBandipur-1771154691.jpg",
+      "date": "Jul",
+      "day": "18",
+      "location": "The Glasshouse, Brooklyn, NY",
+      "price": 48
+    },
+    {
+      "id": "2",
+      "title": "Summer Beats",
+      "category": "Festival",
+      "image": "/images/austin-neill-247047-unsplash.jpg",
+      "date": "Aug",
+      "day": "05",
+      "location": "Central Park, New York, NY",
+      "price": 35
+    },
+    {
+      "id": "3",
+      "title": "Neon Nights Festival",
+      "category": "Music",
+      "image": "/images/hero-concert-eventuria_pura8c.webp",
+      "date": "Aug",
+      "day": "12",
+      "location": "Bhrikutimandap, Kathmandu, Nepal",
+      "price": 25
+    },
+    {
+      "id": "4",
+      "title": "Canvas & Coffee",
+      "category": "Art",
+      "image": "/images/images.jpg",
+      "date": "Aug",
+      "day": "20",
+      "location": "Thamel, Kathmandu, Nepal",
+      "price": 15
+    },
+    {
+      "id": "5",
+      "title": "Startup Connect",
+      "category": "Business",
+      "image": "/images/business.jpg",
+      "date": "Sep",
+      "day": "05",
+      "location": "Lalitpur, Nepal",
+      "price": 10
+    },
+    {
+      "id": "6",
+      "title": "Art in Bloom Festival",
+      "category": "Art",
+      "image": "/images/art_bloom.jpg",
+      "date": "Sep",
+      "day": "12",
+      "location": "Patan Durbar Square, Lalitpur, Nepal",
+      "price": 20
+    }
+  ],
   "users": [
     {
       "name": "Simran Bist",
