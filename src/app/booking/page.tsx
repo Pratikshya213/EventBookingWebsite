@@ -1,0 +1,73 @@
+"use client";
+
+import { Suspense, useState } from "react";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import BookingForm from "@/components/BookingForm";
+import BookingSummary from "@/components/BookingSummary";
+import { events } from "@/lib/events";
+import { saveBooking } from "@/lib/bookings";
+import { routes } from "@/lib/routes";
+
+function BookingContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const slug = searchParams.get("event") ?? events[0]?.slug;
+  const event = events.find((item) => item.slug === slug);
+  const [submitting, setSubmitting] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+
+  async function handleBooking(values: { fullName: string; email: string; quantity: number }) {
+    if (!event || event.availableTickets <= 0) return;
+    setSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 650));
+    const booking = saveBooking({ name: values.fullName, email: values.email, event: event.title, date: event.date, tickets: values.quantity });
+    router.push(`/confirmation?id=${encodeURIComponent(booking.id)}`);
+  }
+
+  if (!event) {
+    return (
+      <main className="nf">
+        <div>
+          <div className="eyebrow">Event not found</div>
+          <h1>Oops</h1>
+          <p>We couldn&apos;t find that event.</p>
+          <Link className="btn btn-primary" href={routes.events}>Browse events</Link>
+        </div>
+      </main>
+    );
+  }
+
+  return (
+    <main className="page">
+      <div className="container container-md">
+        <Link href={routes.eventDetail(event.slug)} className="back-link"><ArrowLeft size={12} /> Back to event</Link>
+        <div className="eyebrow">Complete your booking</div>
+        <h1 className="page-title">Your details</h1>
+
+        <div className="booking-grid">
+          <section className="panel">
+            <BookingForm
+              availableTickets={event.availableTickets}
+              price={event.price}
+              quantity={quantity}
+              onQuantityChange={setQuantity}
+              submitting={submitting}
+              onSubmit={handleBooking}
+            />
+          </section>
+          <BookingSummary event={event} quantity={quantity} />
+        </div>
+      </div>
+    </main>
+  );
+}
+
+export default function BookingPage() {
+  return (
+    <Suspense fallback={<main className="page"><div className="container container-md"><div className="skeleton" /></div></main>}>
+      <BookingContent />
+    </Suspense>
+  );
+}

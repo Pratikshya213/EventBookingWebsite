@@ -1,18 +1,9 @@
 import type { Metadata } from "next";
-import { Poppins, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import { AuthProvider } from "../context/AuthContext";
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-poppins",
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Navbar from "@/components/NavBar";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "VYBE",
@@ -26,10 +17,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full">
-      <body
-        className={`${poppins.className} ${geistMono.variable} min-h-full flex flex-col antialiased`}
-      >
-        <AuthProvider>{children}</AuthProvider>
+      <body className="min-h-full antialiased">
+        <AuthProvider>
+          <Suspense fallback={null}>
+            <Navbar />
+          </Suspense>
+          {children}
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

@@ -4,16 +4,23 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "backend": "npm --prefix backend start",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "axios": "^1.20.0",
+<<<<<<< HEAD
     "motion": "^14.3.0",
+=======
+    "framer-motion": "^14.1.0",
+    "lucide-react": "^1.55.0",
+>>>>>>> 5071864ee45ac18ed9e2ceebecf1873b25912cdb
     "next": "16.4.0",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",

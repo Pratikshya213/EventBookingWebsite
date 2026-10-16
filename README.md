@@ -2,7 +2,13 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+Start the JSON Server API in one terminal:
+
+```bash
+npm run backend
+```
+
+Then start the Next.js app in another terminal:
 
 ```bash
 npm run dev
@@ -27,7 +33,7 @@ To learn more about Next.js, take a look at the following resources:
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The application routes and shared code live under `src/`.
 
 ## Deploy on Vercel
 

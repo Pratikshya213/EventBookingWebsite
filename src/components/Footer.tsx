@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="w-fu;; bg-white px-7 py-10 md:px-14 md:py-12">
+    <footer className="w-full bg-white px-7 py-10 md:px-14 md:py-12">
       <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
         <div className="space-y-5">
           <Link href="/" className="text-xl no-underline text-[#49312D]">
@@ -14,7 +14,7 @@ export default function Footer() {
         {/* Navigation */}
         <nav className="flex flex-wrap items-center gap-4 md:gap-12">
           <Link
-            href="/browse"
+            href="/events"
             className="text-base text-[#49312D] transition-colors hover:text-[#A47768]"
           >
             Browse
@@ -28,7 +28,7 @@ export default function Footer() {
           </Link>
 
           <Link
-            href="/account"
+            href="/my-bookings"
             className="text-base text-[#49312D] transition-colors hover:text-[#A47768] "
           >
             Account

@@ -22,17 +22,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem("user");
+    const timer = window.setTimeout(() => {
+      try {
+        const storedUser = localStorage.getItem("user");
 
-      if (storedUser) {
-        setUserState(JSON.parse(storedUser));
+        if (storedUser) {
+          setUserState(JSON.parse(storedUser));
+        }
+      } catch {
+        localStorage.removeItem("user");
+      } finally {
+        setLoading(false);
       }
-    } catch {
-      localStorage.removeItem("user");
-    } finally {
-      setLoading(false);
-    }
+    }, 0);
+
+    return () => window.clearTimeout(timer);
   }, []);
 
   function setUser(newUser: User | null) {

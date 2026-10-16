@@ -1,4 +1,4 @@
-import Footer from "@/src/components/Footer";
+import Footer from "@/components/Footer";
 import HeroSection from "./HeroSection";
 import EventCard from "./EventCard";
 
