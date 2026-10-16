@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 const routes = {
@@ -10,18 +10,28 @@ const routes = {
   events: "/events",
   favorites: "/favorites",
   myBookings: "/my-bookings",
+  admin: "/admin",
 };
+
+const subscribeToNothing = () => () => {};
+const getMountedSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 export default function Navbar() {
   const pathname = usePathname();
+  const mounted = useSyncExternalStore(subscribeToNothing, getMountedSnapshot, getServerSnapshot);
   const [open, setOpen] = useState(false);
   const { user, logout } = useAuth();
-  const signedIn = Boolean(user);
+
+  // Keep the server render and the first browser render identical. The pathname
+  // and the saved user can differ until the browser has hydrated this component.
+  const signedIn = mounted && Boolean(user);
 
   const links = [
     { href: routes.events, label: "Browse events" },
     { href: routes.favorites, label: "Favorites" },
     ...(signedIn ? [{ href: routes.myBookings, label: "My bookings" }] : []),
+    ...(signedIn && user?.role === "admin" ? [{ href: routes.admin, label: "Admin" }] : []),
   ];
 
   return (
@@ -34,7 +44,7 @@ export default function Navbar() {
 
         <nav className="nav-links" aria-label="Main">
           {links.map((l) => (
-            <Link key={l.label} href={l.href} aria-current={pathname.startsWith(l.href) ? "page" : undefined}>
+            <Link key={l.label} href={l.href} aria-current={mounted && pathname.startsWith(l.href) ? "page" : undefined}>
               {l.label}
             </Link>
           ))}

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { useAuth } from "../context/AuthContext";
 import { registerUser } from "../lib/auth";
 
 export default function SignUpForm() {
@@ -12,7 +11,6 @@ export default function SignUpForm() {
     "mt-2 w-full rounded-[13px] border border-[#e6dedb] bg-white px-5 py-3.5 text-sm text-[#49302f] outline-none transition placeholder:text-[#a99b9b] focus:border-[#df6c5c] focus:ring-2 focus:ring-[#df6c5c]/15";
 
   const router = useRouter();
-  const { setUser } = useAuth();
 
   const [info, setInfo] = useState({
     name: "",
@@ -39,18 +37,11 @@ export default function SignUpForm() {
 
     try {
       setLoading(true);
-      const user = await registerUser(
+      await registerUser(
         info.name.trim(),
         info.email.trim(),
         info.password,
-        info.confirmPassword,
       );
-
-      setUser({
-        id: String(user.id),
-        name: user.name,
-        email: user.email,
-      });
 
       router.push("/login");
     } catch (error) {

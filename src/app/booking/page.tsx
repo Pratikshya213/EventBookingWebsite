@@ -6,24 +6,47 @@ import { ArrowLeft } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import BookingForm from "@/components/BookingForm";
 import BookingSummary from "@/components/BookingSummary";
-import { events } from "@/lib/events";
+import { useEvents } from "@/lib/useEvents";
 import { saveBooking } from "@/lib/bookings";
 import { routes } from "@/lib/routes";
 
 function BookingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { events, loading } = useEvents();
   const slug = searchParams.get("event") ?? events[0]?.slug;
   const event = events.find((item) => item.slug === slug);
   const [submitting, setSubmitting] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [bookingError, setBookingError] = useState("");
 
   async function handleBooking(values: { fullName: string; email: string; quantity: number }) {
     if (!event || event.availableTickets <= 0) return;
     setSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 650));
-    const booking = saveBooking({ name: values.fullName, email: values.email, event: event.title, date: event.date, tickets: values.quantity });
+    setBookingError("");
+    try {
+    const booking = await saveBooking({
+      name: values.fullName,
+      email: values.email,
+      event: event.title,
+      date: event.date,
+      tickets: values.quantity,
+      eventId: event.id,
+      image: event.image,
+      venue: event.venue,
+      time: event.time,
+      price: event.price,
+    });
     router.push(`/confirmation?id=${encodeURIComponent(booking.id)}`);
+    } catch (error) {
+      setBookingError(error instanceof Error ? error.message : "Booking could not be completed.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (loading) {
+    return <main className="page"><div className="container container-md"><div className="skeleton skeleton-card" /></div></main>;
   }
 
   if (!event) {
@@ -54,6 +77,7 @@ function BookingContent() {
               quantity={quantity}
               onQuantityChange={setQuantity}
               submitting={submitting}
+              error={bookingError}
               onSubmit={handleBooking}
             />
           </section>
@@ -66,7 +90,7 @@ function BookingContent() {
 
 export default function BookingPage() {
   return (
-    <Suspense fallback={<main className="page"><div className="container container-md"><div className="skeleton" /></div></main>}>
+    <Suspense fallback={<main className="page"><div className="container container-md"><div className="skeleton skeleton-card" /></div></main>}>
       <BookingContent />
     </Suspense>
   );

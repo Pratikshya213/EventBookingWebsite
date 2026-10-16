@@ -14,9 +14,10 @@ type Props = {
   onQuantityChange: (value: number) => void;
   onSubmit: (values: { fullName: string; email: string; quantity: number }) => Promise<void> | void;
   submitting: boolean;
+  error?: string;
 };
 
-export default function BookingForm({ availableTickets, price, quantity, onQuantityChange, onSubmit, submitting }: Props) {
+export default function BookingForm({ availableTickets, price, quantity, onQuantityChange, onSubmit, submitting, error }: Props) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -75,6 +76,7 @@ export default function BookingForm({ availableTickets, price, quantity, onQuant
       <p className="hint">Maximum {MAX_PER_BOOKING} tickets per booking.</p>
 
       {errors.form && <p role="alert" className="form-alert">{errors.form}</p>}
+      {error && <p role="alert" className="form-alert">{error}</p>}
       {soldOut && <p className="form-alert">This event is sold out.</p>}
 
       <button type="submit" disabled={submitting || soldOut} className="btn btn-primary btn-block btn-lg">

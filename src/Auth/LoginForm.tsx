@@ -40,9 +40,10 @@ export default function LoginForm() {
         id: String(user.id),
         name: user.name,
         email: user.email,
+        role: user.role === "admin" ? "admin" : "user",
       });
 
-      router.push("/");
+      router.push(user.role === "admin" ? "/admin" : "/");
     } catch (error) {
       setError(
         error instanceof Error
