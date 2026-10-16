@@ -8,7 +8,7 @@ import { routes } from "@/lib/routes";
 import { splitDate, formatPrice } from "@/lib/format";
 
 export default function FeaturedEvents() {
-  const { events, loading } = useEvents();
+  const { events, loading, error } = useEvents();
 
   return (
     <section className="featured" id="discover">
@@ -21,6 +21,7 @@ export default function FeaturedEvents() {
           <Link href={routes.events} className="section-link">See everything <ArrowRight size={13} /></Link>
         </div>
 
+        {error && <p className="form-alert" role="alert">{error}</p>}
         <div className="event-grid">
           {loading && [0, 1, 2].map((i) => <div key={i} className="skeleton skeleton-card" />)}
           {events.slice(0, 3).map((event) => {

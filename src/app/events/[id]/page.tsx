@@ -12,13 +12,27 @@ import { formatPrice, formatTime, shortDate } from "@/lib/format";
 function EventDetails() {
   const params = useParams<{ id: string }>();
   const id = decodeURIComponent(params.id);
-  const { events, loading } = useEvents();
+  const { events, loading, error } = useEvents();
   const event = events.find((item) => item.slug === id || item.id === id);
 
   if (loading) {
     return (
       <main className="page">
         <div className="container container-md"><div className="skeleton skeleton-card" /></div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="page">
+        <div className="container container-md">
+          <section className="panel">
+            <h1 className="page-title">Events are temporarily unavailable</h1>
+            <p role="alert">{error}</p>
+            <Link className="btn btn-primary" href={routes.events}>Try again</Link>
+          </section>
+        </div>
       </main>
     );
   }

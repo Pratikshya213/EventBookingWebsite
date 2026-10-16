@@ -13,7 +13,7 @@ import { routes } from "@/lib/routes";
 function BookingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { events, loading } = useEvents();
+  const { events, loading, error: eventsError } = useEvents();
   const slug = searchParams.get("event") ?? events[0]?.slug;
   const event = events.find((item) => item.slug === slug);
   const [submitting, setSubmitting] = useState(false);
@@ -47,6 +47,19 @@ function BookingContent() {
 
   if (loading) {
     return <main className="page"><div className="container container-md"><div className="skeleton skeleton-card" /></div></main>;
+  }
+
+  if (eventsError) {
+    return (
+      <main className="nf">
+        <div>
+          <div className="eyebrow">Booking service unavailable</div>
+          <h1>We couldn&apos;t load this event</h1>
+          <p role="alert">{eventsError}</p>
+          <Link className="btn btn-primary" href={routes.events}>Try again</Link>
+        </div>
+      </main>
+    );
   }
 
   if (!event) {

@@ -8,7 +8,7 @@ import { routes } from "@/lib/routes";
 import { formatPrice, splitDate } from "@/lib/format";
 
 export default function EventsPage() {
-  const { events, loading } = useEvents();
+  const { events, loading, error } = useEvents();
 
   return (
     <main className="page">
@@ -20,6 +20,8 @@ export default function EventsPage() {
           <div className="event-grid">
             {[0, 1, 2].map((i) => <div key={i} className="skeleton skeleton-card" />)}
           </div>
+        ) : error ? (
+          <p className="form-alert" role="alert">{error}</p>
         ) : events.length === 0 ? (
           <div className="empty">
             <h2>No events yet</h2>
