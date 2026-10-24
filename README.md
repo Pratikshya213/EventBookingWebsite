@@ -1,42 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VYBE Event Booking
 
-## Getting Started
+An event discovery and ticket booking app built with Next.js 16, React 19, and TypeScript.
 
-Start the JSON Server API in one terminal:
+## Local development
 
-```bash
-npm run backend
-```
-
-Then start the Next.js app in another terminal:
+Use Node.js 20.9 or newer. Create a Postgres database (Neon works well), copy `.env.example` to `.env.local`, fill in the values, then run:
 
 ```bash
+npm install
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app and its API run together at [http://localhost:3000](http://localhost:3000). Database tables and starter events are created automatically on the first API request. Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` to create the initial admin account.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Production build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+npm run start
+```
 
-## Learn More
+## Vercel deployment
 
-To learn more about Next.js, take a look at the following resources:
+Import the repository into Vercel and add a Postgres database from the Vercel Marketplace (Neon is supported). Add a Vercel Blob store for event image uploads. Configure these environment variables in Vercel for Production and Preview:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `DATABASE_URL` — Postgres connection string (usually added by the database integration).
+- `AUTH_SECRET` — a private random value of at least 32 characters.
+- `ADMIN_EMAIL` and `ADMIN_PASSWORD` — credentials for the first admin account.
+- `BLOB_READ_WRITE_TOKEN` — usually added by the Blob integration.
 
-The application routes and shared code live under `src/`.
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Then deploy using Vercel's standard Next.js build settings. API routes, cookie-based login, events and bookings use the same deployment; event images are stored in Blob. Use a new/empty database for the initial setup. Keep secrets out of source control. `backend/db.json` remains only as legacy demo data; the deployed app does not use JSON Server or local disk storage.

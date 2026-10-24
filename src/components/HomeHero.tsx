@@ -1,10 +1,14 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Search } from "lucide-react";
-import { events } from "@/lib/events";
+import { useEvents } from "@/lib/useEvents";
 import { routes } from "@/lib/routes";
 import { shortDate } from "@/lib/format";
 
 export default function HomeHero() {
+  const { events } = useEvents();
   const featured = events[0];
 
   return (
@@ -35,7 +39,7 @@ export default function HomeHero() {
 
         {featured && (
           <div className="hero-card">
-            <img src={featured.image} alt={featured.title} />
+            <Image src={featured.image} alt={featured.title} fill sizes="(max-width: 900px) 100vw, 400px" />
             <span className="pill">Live this week</span>
             <div className="hero-feature">
               <div>

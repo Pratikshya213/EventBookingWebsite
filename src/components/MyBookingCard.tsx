@@ -1,15 +1,16 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Booking } from "@/lib/bookings";
-import { bookingCode, findEventByTitle, formatPrice, shortDate } from "@/lib/format";
+import { bookingCode, eventFromBooking, formatPrice, shortDate } from "@/lib/format";
 
 export default function MyBookingCard({ booking }: { booking: Booking }) {
-  const event = findEventByTitle(booking.event);
+  const info = eventFromBooking(booking);
   const tickets = `${booking.tickets} ${booking.tickets === 1 ? "ticket" : "tickets"}`;
-  const total = event ? ` · ${formatPrice(event.price * booking.tickets)}` : "";
+  const total = info.price !== undefined ? ` · ${formatPrice(info.price * booking.tickets)}` : "";
 
   return (
     <Link href={`/confirmation?id=${encodeURIComponent(booking.id)}`} className="booking-card">
-      {event && <img src={event.image} alt="" />}
+      {info.image && <Image src={info.image} alt="" width={92} height={74} />}
       <div>
         <p className="date">{shortDate(booking.date)}</p>
         <h3>{booking.event}</h3>

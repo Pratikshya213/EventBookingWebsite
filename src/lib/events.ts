@@ -1,3 +1,5 @@
+import api from "./axios";
+
 export type EventItem = {
   id: string;
   slug: string;
@@ -13,6 +15,7 @@ export type EventItem = {
   availableTickets: number;
 };
 
+// Starter events seed a new database and help display older browser-stored bookings.
 export const events: EventItem[] = [
   {
     id: "event-1",
@@ -82,4 +85,10 @@ export const events: EventItem[] = [
 
 export function getEventBySlug(slug: string) {
   return events.find((event) => event.slug === slug);
+}
+
+/** Loads persisted events from the app API, soonest first. */
+export async function fetchEvents(): Promise<EventItem[]> {
+  const response = await api.get<EventItem[]>("/events");
+  return [...response.data].sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`));
 }

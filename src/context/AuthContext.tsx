@@ -6,6 +6,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
+  role?: "admin" | "user";
 };
 
 type AuthContextType = {
@@ -22,35 +23,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      try {
-        const storedUser = localStorage.getItem("user");
-
-        if (storedUser) {
-          setUserState(JSON.parse(storedUser));
-        }
-      } catch {
-        localStorage.removeItem("user");
-      } finally {
-        setLoading(false);
-      }
-    }, 0);
-
-    return () => window.clearTimeout(timer);
+    let active = true;
+    fetch("/api/auth/me", { credentials: "same-origin" })
+      .then((response) => response.ok ? response.json() : null)
+      .then((data: { user?: User } | null) => { if (active) setUserState(data?.user ?? null); })
+      .catch(() => { if (active) setUserState(null); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
   }, []);
 
   function setUser(newUser: User | null) {
     setUserState(newUser);
-
-    if (newUser) {
-      localStorage.setItem("user", JSON.stringify(newUser));
-    } else {
-      localStorage.removeItem("user");
-    }
   }
 
   function logout() {
     setUser(null);
+    void fetch("/api/auth/logout", { method: "POST", credentials: "same-origin" });
   }
 
   return (
