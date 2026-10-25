@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 
 export default function Footer() {
@@ -6,7 +7,7 @@ export default function Footer() {
       <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
         <div className="space-y-5">
           <Link href="/" className="text-xl no-underline text-[#49312D]">
-            VYBE.
+            happen.
           </Link>
           <p className="text-sm text-[#795B55]">Good events. Better stories</p>
         </div>
@@ -36,7 +37,7 @@ export default function Footer() {
         </nav>
 
         {/* Copyright */}
-        <p className="text-sm text-[#96736B] ">&copy; 2025 Vybe</p>
+        <p className="text-sm text-[#96736B] ">&copy; 2025 happen</p>
       </div>
     </footer>
   );

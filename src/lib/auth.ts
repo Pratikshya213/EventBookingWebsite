@@ -2,9 +2,11 @@ export type LocalUser = { id: string; name: string; email: string; role: "admin"
 const USERS_KEY = "happen-users";
 const SESSION_KEY = "happen-session";
 const DEMO_USERS: LocalUser[] = [
+  { id: "demo-admin-happen", name: "Admin", email: "admin@happen.com", role: "admin", password: "admin1234" },
   { id: "demo-admin", name: "Admin", email: "admin@gmail.com", role: "admin", password: "admin1234" },
   { id: "demo-simran", name: "Simran Bist", email: "simran@gmail.com", role: "user", password: "simran123" },
   { id: "demo-alex", name: "Alex", email: "alex@gmail.com", role: "user", password: "alex1234" },
+  { id: "demo-pratikshya", name: "Pratikshya23", email: "pratikshya123@servicehub.com", role: "user", password: "12345678" },
 ];
 
 function readUsers(): LocalUser[] {

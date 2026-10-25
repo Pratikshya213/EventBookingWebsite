@@ -13,9 +13,10 @@ npm run dev
 
 The app runs at [http://localhost:3000](http://localhost:3000). It uses static starter events and browser `localStorage` for accounts, favorites, bookings, and admin-created events. Demo credentials:
 
-- Admin: `admin@gmail.com` / `admin1234`
+- Admin: `admin@happen.com` / `admin1234` (also accepts `admin@gmail.com` / `admin1234`)
 - User: `simran@gmail.com` / `simran123`
 - User: `alex@gmail.com` / `alex1234`
+- User: `Pratikshya123@servicehub.com` / `12345678`
 
 ## Build and deploy
 
