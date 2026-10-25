@@ -147,7 +147,7 @@
     "users":  [
                   {
                       "name":  "Admin",
-                      "email":  "admin@happen.com",
+                      "email":  "admin@gmai.com",
                       "password":  "admin1234",
                       "confirmPassword":  "admin1234",
                       "role":  "admin",
@@ -169,7 +169,7 @@
                   },
                   {
                       "name":  "Pratikshya23",
-                      "email":  "Pratikshya123@servicehub.com",
+                      "email":  "Pratikshya123@gmail.com",
                       "password":  "12345678",
                       "confirmPassword":  "12345678",
                       "id":  "r-Rr8EcHw7c"

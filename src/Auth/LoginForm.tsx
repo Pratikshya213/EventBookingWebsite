@@ -84,7 +84,7 @@ export default function LoginForm() {
             </p>
 
             <p className="mt-2 text-xs text-[#805c58]">
-              Demo admin: <strong>admin@happen.com</strong> / <strong>admin1234</strong>
+              Demo admin: <strong>admin@gmai.com</strong> / <strong>admin1234</strong>
             </p>
 
             <form className="mt-7 space-y-5" onSubmit={handleSubmit}>
