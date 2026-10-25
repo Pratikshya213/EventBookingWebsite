@@ -6,7 +6,7 @@ export const routes = {
   favorites: "/favorites",
   myBookings: "/my-bookings",
   booking: "/booking",
-  eventDetail: (slug: string) => `/events/${encodeURIComponent(slug)}`,
+  eventDetail: (slug: string) => `/event/?id=${encodeURIComponent(slug)}`,
 };
 
 // Pages that show the "Hi, Alex / Log out" navbar (as in the design).

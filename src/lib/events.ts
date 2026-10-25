@@ -1,4 +1,4 @@
-import api from "./axios";
+const STORAGE_KEY = "happen-events";
 
 export type EventItem = {
   id: string;
@@ -79,8 +79,47 @@ export function getEventBySlug(slug: string) {
   return events.find((event) => event.slug === slug);
 }
 
-/** Loads persisted events from the app API, soonest first. */
+/** Loads user-created events from this browser and combines them with starter data. */
 export async function fetchEvents(): Promise<EventItem[]> {
-  const response = await api.get<EventItem[]>("/events");
-  return [...response.data].sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`));
+  if (typeof window === "undefined") return events;
+  try {
+    const saved: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]");
+    const extras = Array.isArray(saved) ? saved as EventItem[] : [];
+    const removed = new Set(JSON.parse(localStorage.getItem(`${STORAGE_KEY}-removed`) ?? "[]") as string[]);
+    const extraIds = new Set(extras.map((item) => item.id));
+    const combined = [...events.filter((item) => !removed.has(item.id) && !extraIds.has(item.id)), ...extras];
+    return combined.sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`));
+  } catch {
+    return events;
+  }
+}
+
+export function saveLocalEvent(input: Omit<EventItem, "id">, id?: string): EventItem {
+  const current = readLocalEvents();
+  const event = { ...input, id: id ?? `event-${Date.now()}` };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify([...current.filter((item) => item.id !== event.id), event]));
+  const removed = readRemovedEvents().filter((item) => item !== event.id);
+  localStorage.setItem(`${STORAGE_KEY}-removed`, JSON.stringify(removed));
+  return event;
+}
+
+export function deleteLocalEvent(id: string) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(readLocalEvents().filter((item) => item.id !== id)));
+  if (events.some((item) => item.id === id)) {
+    localStorage.setItem(`${STORAGE_KEY}-removed`, JSON.stringify([...new Set([...readRemovedEvents(), id])]));
+  }
+}
+
+function readLocalEvents(): EventItem[] {
+  try {
+    const value: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]");
+    return Array.isArray(value) ? value as EventItem[] : [];
+  } catch { return []; }
+}
+
+function readRemovedEvents(): string[] {
+  try {
+    const value: unknown = JSON.parse(localStorage.getItem(`${STORAGE_KEY}-removed`) ?? "[]");
+    return Array.isArray(value) ? value as string[] : [];
+  } catch { return []; }
 }

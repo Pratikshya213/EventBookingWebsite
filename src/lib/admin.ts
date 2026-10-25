@@ -1,50 +1,35 @@
-import axios from "axios";
-import api from "./axios";
-import type { EventItem } from "./events";
-import type { Booking } from "./bookings";
+import { deleteLocalEvent, fetchEvents, saveLocalEvent, type EventItem } from "./events";
+import { getBookings } from "./bookings";
 
 export type EventInput = Omit<EventItem, "id">;
 
 export async function listEvents() {
-  const response = await api.get<EventItem[]>("/events");
-  return response.data;
+  return fetchEvents();
 }
 
 export async function listBookings() {
-  try {
-    const response = await api.get<Booking[]>("/bookings");
-    return response.data;
-  } catch (error) {
-    // Older db.json files have no "bookings" list yet
-    if (axios.isAxiosError(error) && error.response?.status === 404) return [];
-    throw error;
-  }
+  return getBookings();
 }
 
 export async function createEvent(input: EventInput) {
-  const response = await api.post<EventItem>("/events", input);
-  return response.data;
+  return saveLocalEvent(input);
 }
 
 export async function updateEvent(id: string, input: EventInput) {
-  const response = await api.patch<EventItem>(`/events/${encodeURIComponent(id)}`, input);
-  return response.data;
+  return saveLocalEvent(input, id);
 }
 
 export async function deleteEvent(id: string) {
-  await api.delete(`/events/${encodeURIComponent(id)}`);
+  deleteLocalEvent(id);
 }
 
 /** Uploads an image from the admin's device and returns the URL to store on the event. */
 export async function uploadEventImage(file: File): Promise<string> {
-  const body = new FormData();
-  body.append("file", file);
-
-  const response = await fetch("/api/uploads", { method: "POST", body });
-  const data = (await response.json().catch(() => ({}))) as { url?: string; error?: string };
-
-  if (!response.ok || !data.url) {
-    throw new Error(data.error ?? "Image upload failed.");
-  }
-  return data.url;
+  if (file.size > 1024 * 1024) throw new Error("For browser storage, choose an image under 1 MB.");
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => typeof reader.result === "string" ? resolve(reader.result) : reject(new Error("Image could not be read."));
+    reader.onerror = () => reject(new Error("Image could not be read."));
+    reader.readAsDataURL(file);
+  });
 }

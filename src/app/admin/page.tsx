@@ -10,23 +10,9 @@ import AdminBookingsTable from "@/components/admin/AdminBookingsTable";
 import { eventFromBooking, formatPrice } from "@/lib/format";
 import type { Booking } from "@/lib/bookings";
 import type { EventItem } from "@/lib/events";
-import api from "@/lib/axios";
+import { deleteEvent, listBookings, listEvents } from "@/lib/admin";
 
 type Tab = "events" | "bookings";
-
-async function listEvents(): Promise<EventItem[]> {
-  const response = await api.get<EventItem[]>("/events");
-  return response.data;
-}
-
-async function listBookings(): Promise<Booking[]> {
-  const response = await api.get<Booking[]>("/bookings");
-  return response.data;
-}
-
-async function deleteEvent(id: EventItem["id"]): Promise<void> {
-  await api.delete(`/events/${encodeURIComponent(String(id))}`);
-}
 
 export default function AdminPage() {
   const { user, loading: authLoading } = useAuth();
@@ -50,7 +36,7 @@ export default function AdminPage() {
         setBookings(bookingList);
       })
       .catch(() => {
-        if (active) setLoadError("Could not load admin data. Check the database configuration and try again.");
+        if (active) setLoadError("Could not load saved browser data.");
       })
       .finally(() => {
         if (active) setLoading(false);

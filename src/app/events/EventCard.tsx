@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useFavorites } from "@/context/FavoritesContext";
+import { routes } from "@/lib/routes";
 import { formatPrice } from "@/lib/format";
 
 type Event = {
@@ -29,7 +30,7 @@ export default function EventCard({ event }: EventCardProps) {
 
   const [message, setMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
-  const eventHref = `/events/${encodeURIComponent(event.slug ?? String(event.id))}`;
+  const eventHref = routes.eventDetail(event.slug ?? String(event.id));
 
   const handleFavorite = () => {
     toggleFavorite(event);
