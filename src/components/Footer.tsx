@@ -36,7 +36,7 @@ export default function Footer() {
         </nav>
 
         {/* Copyright */}
-        <p className="text-sm text-[#96736B] ">&copy; 2025 Vybe</p>
+        <p className="text-sm text-[#96736B] ">&copy; 2025 happen</p>
       </div>
     </footer>
   );
