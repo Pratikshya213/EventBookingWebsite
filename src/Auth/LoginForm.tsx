@@ -83,6 +83,10 @@ export default function LoginForm() {
               Your event is waiting. Log in to complete your booking.
             </p>
 
+            <p className="mt-2 text-xs text-[#805c58]">
+              Demo admin: <strong>admin@gmail.com</strong> / <strong>admin1234</strong>
+            </p>
+
             <form className="mt-7 space-y-5" onSubmit={handleSubmit}>
               <div>
                 <label

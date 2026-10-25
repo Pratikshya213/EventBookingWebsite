@@ -11,7 +11,11 @@ npm install
 npm run dev
 ```
 
-The app runs at [http://localhost:3000](http://localhost:3000). It uses static starter events and browser `localStorage` for demo accounts, favorites, bookings, and admin-created events. Demo admin: `admin@gmail.com` / `admin1234`.
+The app runs at [http://localhost:3000](http://localhost:3000). It uses static starter events and browser `localStorage` for accounts, favorites, bookings, and admin-created events. Demo credentials:
+
+- Admin: `admin@gmail.com` / `admin1234`
+- User: `simran@gmail.com` / `simran123`
+- User: `alex@gmail.com` / `alex1234`
 
 ## Build and deploy
 
