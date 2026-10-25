@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "../context/AuthContext";
 import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
+import { FavoritesProvider } from "@/context/FavoritesContext";
 
 export const metadata: Metadata = {
   title: "VYBE",
@@ -19,11 +20,13 @@ export default function RootLayout({
     <html lang="en" className="h-full">
       <body className="min-h-full antialiased">
         <AuthProvider>
-          <Suspense fallback={null}>
-            <Navbar />
-          </Suspense>
-          {children}
-          <Footer />
+          <FavoritesProvider>
+            <Suspense fallback={null}>
+              <Navbar />
+            </Suspense>
+            {children}
+            <Footer />
+          </FavoritesProvider>
         </AuthProvider>
       </body>
     </html>

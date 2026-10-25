@@ -5,9 +5,17 @@ export default function NotFound() {
     <main className="nf">
       <div>
         <div className="eyebrow">Wrong turn, good story</div>
+
         <h1>404</h1>
-        <p>This page slipped out for the night.</p>
-        <Link className="btn btn-primary" href="/">Back to the good stuff</Link>
+
+        <p>
+          This event slipped out for the night. It may have been removed or the
+          link might be incorrect.
+        </p>
+
+        <Link className="btn btn-primary" href="/events">
+          Explore Events
+        </Link>
       </div>
     </main>
   );
