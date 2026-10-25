@@ -27,7 +27,7 @@ npm run start
 
 Import the repository into Vercel and add a Postgres database from the Vercel Marketplace (Neon is supported). Add a Vercel Blob store for event image uploads. Configure these environment variables in Vercel for Production and Preview:
 
-- `DATABASE_URL` — Postgres connection string (usually added by the database integration).
+- `DATABASE_URL` — Postgres connection string (usually added by the database integration). The backend also accepts `POSTGRES_URL`, `NEON_DATABASE_URL`, `DATABASE_URL_UNPOOLED`, or `POSTGRES_URL_NON_POOLING` if your provider uses one of those names.
 - `AUTH_SECRET` — a private random value of at least 32 characters.
 - `ADMIN_EMAIL` and `ADMIN_PASSWORD` — credentials for the first admin account.
 - `BLOB_READ_WRITE_TOKEN` — usually added by the Blob integration.
