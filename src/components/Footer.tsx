@@ -13,7 +13,7 @@ export default function Footer() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex flex-wrap items-center gap-4 md:gap-12">
+        <nav aria-label="Footer navigation" className="flex flex-wrap items-center gap-4 md:gap-12">
           <Link
             href="/events"
             className="text-base text-[#49312D] transition-colors hover:text-[#A47768]"
@@ -37,7 +37,7 @@ export default function Footer() {
         </nav>
 
         {/* Copyright */}
-        <p className="text-sm text-[#96736B] ">&copy; 2025 happen</p>
+        <p className="text-sm text-[#96736B]">&copy; {new Date().getFullYear()} happen.</p>
       </div>
     </footer>
   );
