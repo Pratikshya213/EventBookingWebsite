@@ -6,8 +6,12 @@ export const routes = {
   favorites: "/favorites",
   myBookings: "/my-bookings",
   booking: "/booking",
-  eventDetail: (slug: string) => `/event/?id=${encodeURIComponent(slug)}`,
+  eventDetail: (slug: string) => events.some((event) => event.slug === slug)
+    ? `/events/${encodeURIComponent(slug)}`
+    : `/event/?id=${encodeURIComponent(slug)}`,
 };
 
 // Pages that show the "Hi, Alex / Log out" navbar (as in the design).
 export const signedInPaths = ["/booking", "/confirmation", "/my-bookings"];
+import { events } from "@/lib/events";
+

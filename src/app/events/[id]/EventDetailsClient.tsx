@@ -4,10 +4,8 @@ import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
-import { ArrowLeft, CalendarDays, Clock3, MapPin } from "lucide-react";
 import { useEvents } from "@/lib/useEvents";
-import { routes } from "@/lib/routes";
-import { formatPrice, formatTime, longDate } from "@/lib/format";
+import { formatTime } from "@/lib/format";
 
 function EventDetails() {
   const params = useParams<{ id?: string }>();
@@ -17,23 +15,26 @@ function EventDetails() {
   const event = events.find((item) => item.slug === id || item.id === id);
 
   if (loading) {
-    return <main className="page"><div className="container container-md"><div className="skeleton skeleton-card" /></div></main>;
+    return <main className="min-h-screen bg-[#fff8eb] px-4 py-7 sm:px-6 sm:py-10"><div className="mx-auto max-w-5xl"><div className="skeleton skeleton-card" /></div></main>;
   }
 
   if (!event) {
-    return <main className="nf"><div><div className="eyebrow">Event not found</div><h1>Oops</h1><p>We couldn&apos;t find that event.</p><Link className="btn btn-primary" href={routes.events}>Browse events</Link></div></main>;
+    return <main className="min-h-screen bg-[#fff8eb] px-4 py-7 sm:px-6 sm:py-10"><div className="mx-auto max-w-5xl"><Link href="/events" className="text-sm text-[#805c58]">← Back to events</Link><h1 className="mt-8 text-3xl font-bold text-[#452b2e]">Event not found</h1><p className="mt-3 text-[#805c58]">This event may have been removed.</p></div></main>;
   }
 
   const soldOut = event.availableTickets <= 0;
+  const [, month, day] = event.date.split("-");
+  const dateLabel = new Date(Date.UTC(Number(event.date.slice(0, 4)), Number(month) - 1, Number(day)))
+    .toLocaleDateString("en-US", { month: "short", timeZone: "UTC" });
 
   return (
     <main className="min-h-screen bg-[#fff8eb] px-4 py-7 sm:px-6 sm:py-10">
       <div className="mx-auto max-w-5xl">
-        <Link href={routes.events} className="mb-5 inline-flex items-center gap-2 text-sm font-medium text-[#805c58] transition hover:text-[#e76f61]">
-          <ArrowLeft size={16} /> Back to events
+        <Link href="/events" className="mb-5 inline-flex items-center gap-2 text-sm font-medium text-[#805c58] transition hover:text-[#e76f61]">
+          <span aria-hidden="true">←</span> Back to events
         </Link>
 
-        <article className="overflow-hidden rounded-2xl border border-[#e5dedc] bg-white shadow-sm">
+        <div className="overflow-hidden rounded-2xl border border-[#e5dedc] bg-white shadow-sm">
           <div className="relative h-[210px] w-full overflow-hidden bg-[#f1e8df] sm:h-[280px] lg:h-[340px]">
             <Image src={event.image} alt={event.title} fill priority sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1024px" className="object-cover object-center" />
             <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-[#452b2e] shadow-sm">{event.category}</span>
@@ -47,30 +48,30 @@ function EventDetails() {
               <p className="mb-5 text-sm leading-7 text-[#805c58] sm:text-base">{event.description}</p>
 
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl bg-[#fff8eb] p-4"><p className="mb-1 flex items-center gap-2 text-xs font-medium text-[#805c58]"><CalendarDays size={14} /> Date</p><p className="text-sm font-bold text-[#452b2e]">{longDate(event.date)}</p></div>
-                <div className="rounded-xl bg-[#fff8eb] p-4"><p className="mb-1 flex items-center gap-2 text-xs font-medium text-[#805c58]"><Clock3 size={14} /> Time</p><p className="text-sm font-bold text-[#452b2e]">{formatTime(event.time)}</p></div>
-                <div className="rounded-xl bg-[#fff8eb] p-4 sm:col-span-2"><p className="mb-1 flex items-center gap-2 text-xs font-medium text-[#805c58]"><MapPin size={14} /> Venue</p><p className="text-sm font-bold text-[#452b2e]">{event.venue}</p><p className="mt-1 text-xs text-[#805c58]">{event.city}</p></div>
+                <div className="rounded-xl bg-[#fff8eb] p-4"><p className="mb-1 text-xs font-medium text-[#805c58]">Date</p><p className="text-sm font-bold text-[#452b2e]">{dateLabel} {Number(day)}</p></div>
+                <div className="rounded-xl bg-[#fff8eb] p-4"><p className="mb-1 text-xs font-medium text-[#805c58]">Time</p><p className="text-sm font-bold text-[#452b2e]">{formatTime(event.time)}</p></div>
+                <div className="rounded-xl bg-[#fff8eb] p-4 sm:col-span-2"><p className="mb-1 text-xs font-medium text-[#805c58]">Venue</p><p className="text-sm font-bold text-[#452b2e]">{event.venue}</p><p className="mt-1 text-xs text-[#805c58]">{event.city}</p></div>
               </div>
             </section>
 
             <aside className="h-fit rounded-xl border border-[#e5dedc] p-5">
               <p className="mb-1 text-sm text-[#805c58]">Ticket price</p>
-              <p className="mb-1 text-3xl font-bold text-[#452b2e]">{formatPrice(event.price)}</p>
+              <p className="mb-1 text-3xl font-bold text-[#452b2e]">{event.price === 0 ? "Free" : `$${event.price.toLocaleString("en-US")}`}</p>
               <p className="mb-5 text-xs text-[#805c58]">Per ticket</p>
               {soldOut ? (
                 <button type="button" disabled className="w-full cursor-not-allowed rounded-lg bg-gray-300 px-4 py-3 text-sm font-semibold text-gray-600">Sold out</button>
               ) : (
-                <Link href={`${routes.booking}?event=${encodeURIComponent(event.slug)}`} className="block w-full rounded-lg bg-[#e76f61] px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-[#d95d50]">Book Now</Link>
+                <Link href={`/booking?event=${encodeURIComponent(event.slug)}`} className="block w-full rounded-lg bg-[#e76f61] px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-[#d95d50]">Book Now</Link>
               )}
-              <p className="mt-3 text-center text-xs leading-5 text-[#805c58]">{soldOut ? "Tickets are no longer available for this event." : `${event.availableTickets} tickets available`}</p>
+              <p className="mt-3 text-center text-xs leading-5 text-[#805c58]">{soldOut ? "Tickets are no longer available for this event." : "Your next great experience starts here."}</p>
             </aside>
           </div>
-        </article>
+        </div>
       </div>
     </main>
   );
 }
 
 export default function EventDetailsClient() {
-  return <Suspense fallback={<main className="page"><div className="container container-md"><div className="skeleton skeleton-card" /></div></main>}><EventDetails /></Suspense>;
+  return <Suspense fallback={<main className="min-h-screen bg-[#fff8eb] px-4 py-7 sm:px-6 sm:py-10"><div className="mx-auto max-w-5xl"><div className="skeleton skeleton-card" /></div></main>}><EventDetails /></Suspense>;
 }
