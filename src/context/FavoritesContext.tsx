@@ -51,25 +51,6 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsLoaded(true);
     }
-    const timer = window.setTimeout(() => {
-      try {
-        const saved = localStorage.getItem("vybe-favorites");
-
-        if (saved) {
-          const parsed: Event[] = JSON.parse(saved);
-
-          if (Array.isArray(parsed)) {
-            setFavorites(parsed);
-          }
-        }
-      } catch (error) {
-        console.error("Could not load favorites:", error);
-      } finally {
-        setIsLoaded(true);
-      }
-    }, 0);
-
-    return () => window.clearTimeout(timer);
   }, []);
 
   // Save favorites whenever the list changes

@@ -2,8 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export const instant = false;
-
 type Event = {
   id: string | number;
   title: string;
@@ -23,26 +21,34 @@ type EventDetailsPageProps = {
   params: Promise<{ id: string }>;
 };
 
+// Generate a static page for every event during the build.
+export async function generateStaticParams() {
+  const response = await fetch("http://localhost:5000/events", {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch events for static generation.");
+  }
+
+  const events: Event[] = await response.json();
+
+  return events.map((event) => ({
+    id: String(event.id),
+  }));
+}
+
 export default async function EventDetailsPage({
   params,
 }: EventDetailsPageProps) {
   const { id } = await params;
 
-  let response: Response;
-
-  try {
-    response = await fetch(
-      `http://localhost:5000/events/${encodeURIComponent(id)}`,
-      {
-        cache: "no-store",
-        signal: AbortSignal.timeout(5000),
-      },
-    );
-  } catch {
-    throw new Error(
-      "Unable to load event details. Please make sure the event server is running.",
-    );
-  }
+  const response = await fetch(
+    `http://localhost:5000/events/${encodeURIComponent(id)}`,
+    {
+      cache: "force-cache",
+    },
+  );
 
   if (response.status === 404) {
     notFound();
@@ -54,7 +60,7 @@ export default async function EventDetailsPage({
 
   const event: Event | null = await response.json();
 
-  if (!event || !event.id) {
+  if (!event || event.id === undefined || event.id === null) {
     notFound();
   }
 
@@ -136,6 +142,7 @@ export default async function EventDetailsPage({
                   <p className="text-sm font-bold text-[#452b2e]">
                     {event.venue || event.location}
                   </p>
+
                   {event.venue && event.location && (
                     <p className="mt-1 text-xs text-[#805c58]">
                       {event.location}
