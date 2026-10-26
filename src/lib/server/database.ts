@@ -6,9 +6,17 @@ import { hashPassword } from "./password";
 let schemaReady: Promise<void> | undefined;
 
 export async function getDatabase() {
-  const connectionString = process.env.DATABASE_URL;
+  const connectionString = [
+    process.env.DATABASE_URL,
+    process.env.POSTGRES_URL,
+    process.env.NEON_DATABASE_URL,
+    process.env.DATABASE_URL_UNPOOLED,
+    process.env.POSTGRES_URL_NON_POOLING,
+  ].find((value) => value?.trim());
   if (!connectionString) {
-    throw new Error("Database is not configured. Add DATABASE_URL to the environment.");
+    throw new Error(
+      "Database is not configured. Connect a Postgres database and set DATABASE_URL (or POSTGRES_URL) in the Vercel environment variables.",
+    );
   }
 
   const sql = neon(connectionString);

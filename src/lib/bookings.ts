@@ -33,16 +33,8 @@ export function getBookingById(id: string) {
 }
 
 export async function saveBooking(input: Omit<Booking, "id" | "createdAt">): Promise<Booking> {
-  const response = await fetch("/api/bookings", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(input),
-  });
-  const data = await response.json().catch(() => ({})) as Booking & { error?: string };
-  if (!response.ok) throw new Error(data.error ?? "Booking could not be completed.");
-  const booking = { ...data, id: data.bookingId ?? data.id };
-  if (typeof window !== "undefined") {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([booking, ...getBookings()]));
-  }
+  const booking: Booking = { ...input, id: `booking-${Date.now()}`, createdAt: new Date().toISOString() };
+  if (typeof window === "undefined") throw new Error("Bookings can only be saved in a browser.");
+  localStorage.setItem(STORAGE_KEY, JSON.stringify([booking, ...getBookings()]));
   return booking;
 }

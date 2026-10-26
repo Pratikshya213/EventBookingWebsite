@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { clearLocalSession, getLocalSession } from "@/lib/auth";
 
 export type User = {
   id: string;
@@ -24,21 +25,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let active = true;
-    fetch("/api/auth/me", { credentials: "same-origin" })
-      .then((response) => response.ok ? response.json() : null)
-      .then((data: { user?: User } | null) => { if (active) setUserState(data?.user ?? null); })
-      .catch(() => { if (active) setUserState(null); })
-      .finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
+    const timer = window.setTimeout(() => {
+      if (active) { setUserState(getLocalSession()); setLoading(false); }
+    }, 0);
+    return () => { active = false; window.clearTimeout(timer); };
   }, []);
 
   function setUser(newUser: User | null) {
     setUserState(newUser);
+    if (newUser) localStorage.setItem("happen-session", JSON.stringify(newUser));
+    else clearLocalSession();
   }
 
   function logout() {
     setUser(null);
-    void fetch("/api/auth/logout", { method: "POST", credentials: "same-origin" });
+    clearLocalSession();
   }
 
   return (

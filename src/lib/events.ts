@@ -1,4 +1,4 @@
-import api from "./axios";
+const STORAGE_KEY = "happen-events";
 
 export type EventItem = {
   id: string;
@@ -81,14 +81,89 @@ export const events: EventItem[] = [
       "Try new flavours, discover local food stalls, and spend a delicious day out.",
     availableTickets: 200,
   },
+  {
+    id: "simran-1", slug: "midnight-echoes", title: "Midnight Echoes", category: "Music",
+    date: "2027-07-18", time: "19:00", venue: "The Glasshouse", city: "Brooklyn, NY", price: 48,
+    image: "/images/05NepathyamembersperforminginBandipur-1771154691.jpg",
+    description: "Experience an unforgettable night of live music, powerful performances, and electrifying sounds with fellow music lovers.", availableTickets: 100,
+  },
+  {
+    id: "simran-2", slug: "summer-beats", title: "Summer Beats", category: "Festival",
+    date: "2027-08-05", time: "16:00", venue: "Central Park", city: "New York, NY", price: 35,
+    image: "/images/austin-neill-247047-unsplash.jpg",
+    description: "Enjoy a vibrant summer festival filled with energetic performances, great music, and an exciting outdoor atmosphere.", availableTickets: 100,
+  },
+  {
+    id: "simran-3", slug: "neon-nights-festival", title: "Neon Nights Festival", category: "Music",
+    date: "2027-08-12", time: "18:00", venue: "Bhrikutimandap", city: "Kathmandu, Nepal", price: 25,
+    image: "/images/hero-concert-eventuria_pura8c.webp",
+    description: "Dance beneath the lights at a high-energy music festival featuring exciting performances, vibrant visuals, and unforgettable vibes.", availableTickets: 100,
+  },
+  {
+    id: "simran-4", slug: "canvas-and-coffee", title: "Canvas & Coffee", category: "Arts",
+    date: "2027-08-20", time: "11:00", venue: "Thamel Art Space", city: "Kathmandu, Nepal", price: 15,
+    image: "/images/images.jpg",
+    description: "Discover local creativity through art, connect with artists, and enjoy a relaxed atmosphere with coffee and inspiring conversations.", availableTickets: 100,
+  },
+  {
+    id: "simran-5", slug: "startup-connect", title: "Startup Connect", category: "Business",
+    date: "2027-09-05", time: "10:00", venue: "Lalitpur Convention Center", city: "Lalitpur, Nepal", price: 10,
+    image: "/images/business.jpg",
+    description: "Meet entrepreneurs, exchange innovative ideas, build professional connections, and explore opportunities with Nepal's startup community.", availableTickets: 100,
+  },
+  {
+    id: "simran-6", slug: "art-in-bloom-festival", title: "Art in Bloom Festival", category: "Arts",
+    date: "2027-09-12", time: "12:00", venue: "Patan Durbar Square", city: "Lalitpur, Nepal", price: 20,
+    image: "/images/art_bloom.jpg",
+    description: "Celebrate art, culture, and creativity through colorful displays, artistic experiences, and the work of talented local creators.", availableTickets: 100,
+  },
 ];
 
 export function getEventBySlug(slug: string) {
   return events.find((event) => event.slug === slug);
 }
 
-/** Loads persisted events from the app API, soonest first. */
+/** Loads user-created events from this browser and combines them with starter data. */
 export async function fetchEvents(): Promise<EventItem[]> {
-  const response = await api.get<EventItem[]>("/events");
-  return [...response.data].sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`));
+  if (typeof window === "undefined") return events;
+  try {
+    const saved: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]");
+    const extras = Array.isArray(saved) ? saved as EventItem[] : [];
+    const removed = new Set(JSON.parse(localStorage.getItem(`${STORAGE_KEY}-removed`) ?? "[]") as string[]);
+    const extraIds = new Set(extras.map((item) => item.id));
+    const combined = [...events.filter((item) => !removed.has(item.id) && !extraIds.has(item.id)), ...extras];
+    return combined.sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`));
+  } catch {
+    return events;
+  }
+}
+
+export function saveLocalEvent(input: Omit<EventItem, "id">, id?: string): EventItem {
+  const current = readLocalEvents();
+  const event = { ...input, id: id ?? `event-${Date.now()}` };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify([...current.filter((item) => item.id !== event.id), event]));
+  const removed = readRemovedEvents().filter((item) => item !== event.id);
+  localStorage.setItem(`${STORAGE_KEY}-removed`, JSON.stringify(removed));
+  return event;
+}
+
+export function deleteLocalEvent(id: string) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(readLocalEvents().filter((item) => item.id !== id)));
+  if (events.some((item) => item.id === id)) {
+    localStorage.setItem(`${STORAGE_KEY}-removed`, JSON.stringify([...new Set([...readRemovedEvents(), id])]));
+  }
+}
+
+function readLocalEvents(): EventItem[] {
+  try {
+    const value: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]");
+    return Array.isArray(value) ? value as EventItem[] : [];
+  } catch { return []; }
+}
+
+function readRemovedEvents(): string[] {
+  try {
+    const value: unknown = JSON.parse(localStorage.getItem(`${STORAGE_KEY}-removed`) ?? "[]");
+    return Array.isArray(value) ? value as string[] : [];
+  } catch { return []; }
 }
